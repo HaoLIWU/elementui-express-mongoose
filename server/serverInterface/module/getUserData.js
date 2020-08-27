@@ -9,19 +9,23 @@ let userSchema = new Schema({
       type: String,
       required: true
     },
-    sex: {
-      type: String,
-      required: true
-    },
     password: {
       type: String,
       required: true
     },
-    birth: {
-      type: String
+    createTime: {
+      type: String,
+      required: true
     },
     phoneNum: {
-      type: Number,
+      type: String,
+      required: true
+    },
+    sex: {
+      type: String
+    },
+    birth: {
+      type: String
     },
     username: { // 用户名
       type: String

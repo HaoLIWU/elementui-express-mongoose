@@ -27,6 +27,30 @@ router.get('/getlist', (req, res) => {
 });
 
 /**
+ *  获取单个用户信息
+ *  POST /user/getlistByName
+ */
+router.post('/getlistByName', (req, res) => {
+  let body = req.body;
+    User.find({
+      name: body.name
+    }, (err, data) => {
+        if (err){
+            // console.log(err);
+            return res.status(500).json({
+                code: -1,
+                msg: '获取失败'
+            });
+        }
+        return res.status(200).json({
+            code: 1,
+            msg: '获取成功',
+            data: data
+        });
+    })
+})
+
+/**
  *  用户信息分页接口
  */
 router.get('/getlistByNum', (req, res) => {
@@ -69,6 +93,7 @@ router.post('/update', (req, res) => {
   },{
     name: body.name,
     password: body.password,
+    createTime: body.createTime,
     sex: body.sex,
     birth: body.birth,
     phoneNum: body.phoneNum,
@@ -92,7 +117,7 @@ router.post('/update', (req, res) => {
         msg: '更新成功',
         data: data
     });
-  });  
+  });
 });
 
 /**
@@ -125,19 +150,24 @@ router.post('/delete', (req, res) => {
 });
 
 /**
- * 添加用户信息
+ * 添加用户信息,注册
  * POST /user/add
  */
 router.post('/add', (req, res) => {
   let body = req.body;
-  User.findOne({ name: body.name }, function(err, user) {
+  User.findOne({
+      name: body.name,
+      password: body.password,
+      phoneNum: body.phoneNum
+  }, function(err, user) {
     if(err) {
       throw err;
     }
     if (user) {
       return res.status(200).json({
-        code: -2,
-        msg: '用户名已存在，请登录'
+        code: 2,
+        msg: '用户名已存在，请登录',
+        data: user
       });
     }
     new User(body).save(function(err, user) {
@@ -152,7 +182,38 @@ router.post('/add', (req, res) => {
         message: '注册成功',
         data: user
       });
-    }); 
+    });
   });
 });
+
+/**
+ *  用户登录接口
+ * */
+router.post('/login', (req, res) => {
+  let body = req.body;
+  if (!body.name || !body.password){
+    return res.status(404).json({
+        code: -2,
+        msg: '参数出错'
+    })
+  }
+  User.findOne({
+      name: body.name,
+      password: body.password
+  }, function(err, user) {
+      if (err) {
+         throw err;
+      }
+      if (!user) {
+          return res.status(200).json({
+              code: -3,
+              msg: '未找到该用户'
+          });
+      }
+      return res.status(200).json({
+          code: 1,
+          msg: '登录成功'
+      });
+  });
+})
 module.exports = router;

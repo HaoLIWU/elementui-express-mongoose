@@ -24,11 +24,12 @@ router.get('/getlist', (req, res) => {
         msg: '获取成功',
         data: data
     });
-  });  
+  });
 })
 
 /**
  *  用户信息分页接口
+ *  Get /ill/getlistByNum?currentPage=1&pageSize=8
  */
 router.get('/getlistByNum', (req, res) => {
   let currentPage = parseInt(req.query.currentPage);
@@ -48,6 +49,30 @@ router.get('/getlistByNum', (req, res) => {
       msg: '获取成功',
       data: ill
     });
+  })
+})
+
+/**
+ *  获取单个用户的全部病历
+ *  Get /ill/getlistByName?name=xxx
+ */
+router.post('/getlistByName', (req, res) => {
+  let name = req.body.name;
+  Ill.find({
+    name: name
+  }, (err, data) => {
+      if (err){
+          console.log(err);
+          return res.status(500).json({
+              code: -1,
+              msg: '获取失败'
+          });
+      }
+      res.status(200).json({
+          code: 1,
+          msg: '获取成功',
+          data: data
+      });
   })
 })
 
@@ -152,12 +177,12 @@ router.post('/add', (req, res) => {
         console.log(err)
         return res.status(500).json({
           code: -3,
-          message: '参数不完整'
+          msg: '参数不完整'
         })
       }
       return res.status(200).json({
         code: 1,
-        message: '添加病例成功',
+        msg: '添加病例成功',
         data: ill
       });
     })

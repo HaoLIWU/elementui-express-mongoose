@@ -5,7 +5,18 @@
 
 + git clone https://github.com/HaoLIWU/elementui-express-mongoose.git
 
-### Run it
+### client
+
+> + 1 Run 
+>> + cd 到 client文件夹，`npm install`安装依赖,然后 `npm run start` 进行在线编译运行
+> + 2 技术栈
+>> + vue+mui+mint-ui+vue-router+vuex
+>> + 异步加载组件、mixin、路由守卫、动态加载组件等
+> + 3 注意事项：
+>> + 这是一个基于统计文件夹下server后台的病历记录移动app，运行时需要先将下面的server端开启才能使用
+
+
+### Run server
 
 + 这个server文件夹有两个子文件夹，一个是用vue+vuex+vue-router+elementui做的数据管理单页面（backgroundManagementPage），一个是用 nodejs+express+mongoose做的对数据增删查改的接口（serverInterface）
 ，分别 cd 到这两个子文件夹，然后 `npm install` 进行安装依赖。

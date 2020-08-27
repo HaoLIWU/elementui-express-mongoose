@@ -69,7 +69,7 @@ export default {
   methods: {
     onSubmit () {
       const that = this
-      if (!that.form.name || !that.form.password || !that.form.sex || !that.form.birth) {
+      if (!that.form.name || !that.form.password) {
         that.showDialog('请填完必填项', that.closeDialog, that.closeDialog)
         return false
       }
@@ -79,16 +79,18 @@ export default {
         return false
       }
       // 把中国标准时间转为 时间戳形式
-      const date = new Date(that.form.birth).getTime()
+      const date1 = new Date(that.form.birth).getTime()
+      const date2 = +new Date()
       const param = {
         name: that.form.name,
         sex: that.form.sex,
         username: that.form.username,
         password: that.form.password,
         phoneNum: that.form.phoneNum,
-        birth: date
+        birth: date1
       }
       if (Object.keys(that.obj).length === 0) {
+        param.createTime = date2
         myPostAxios('/user/add', param)
           .then((response) => {
             const getData = response.data
@@ -100,6 +102,7 @@ export default {
           })
       } else {
         param.id = that.form._id
+        param.createTime = that.form.createTime
         myPostAxios('/user/update', param)
           .then((response) => {
             const getData = response.data

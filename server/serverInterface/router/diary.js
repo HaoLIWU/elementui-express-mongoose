@@ -23,11 +23,12 @@ router.get('/getlist', (req, res) => {
         msg: '获取成功',
         data: data
     });
-  });  
+  });
 });
 
 /**
  *  用户信息分页接口
+ *   GET /diary/getlistByNum?currentPage=1&pageSize=8
  */
 router.get('/getlistByNum', (req, res) => {
   let currentPage = parseInt(req.query.currentPage);
@@ -50,6 +51,30 @@ router.get('/getlistByNum', (req, res) => {
       data: diary
     });
   })
+})
+
+/**
+ *  获取单个用户的全部日记
+ *  Get /diary/getlistByName?name=xxx
+ */
+router.post('/getlistByName', (req, res) => {
+    let name = req.body.name;
+    Diary.find({
+        name: name
+    }, (err, data) => {
+        if (err){
+            console.log(err);
+            return res.status(500).json({
+                code: -1,
+                msg: '获取失败'
+            });
+        }
+        res.status(200).json({
+            code: 1,
+            msg: '获取成功',
+            data: data
+        });
+    })
 })
 
 /**
